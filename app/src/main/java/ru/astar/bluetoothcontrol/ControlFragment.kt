@@ -9,11 +9,11 @@ import android.widget.SeekBar
 import androidx.fragment.app.viewModels
 import ru.astar.bluetoothcontrol.databinding.FragmentControlBinding
 
-
 /*
 В соответствии с паттерном MVVM мы делегируем всю логику ViewModel'и. Активити и фрагменты
 отвечают только за отображение данных. Все вычисления и весь код содержащий логику работы
 приложения выносится во ViewModel. Нажата кнопка - делегируем во ViewModel, пусть сама разбирается.
+Важно: активити и фрагменты не имеют права менять что-либо во ViewModel
  */
 class ControlFragment : Fragment() {
 
@@ -51,6 +51,7 @@ class ControlFragment : Fragment() {
         viewModel.disconnect()
     }
 
+    /* Вызывается, когда фрагмент виден пользователю и активно выполняется. */
     override fun onResume() {
         super.onResume()
 

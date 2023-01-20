@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 
-// Для получения BluetoothAdapter. Вызывается в классе App.
+/* Для получения BluetoothAdapter. Вызывается в классе App. */
 interface BluetoothAdapterProvider {
 
     fun getAdapter(): BluetoothAdapter

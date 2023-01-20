@@ -6,6 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import no.nordicsemi.android.ble.observer.ConnectionObserver
 
+/* Содержит всю логику, которая не относится к отображения интерфейса.
+ Важно: ViewModel ничего не знает о активити или фрагменте (о View)
+ Важно: ViewModel должна быть без контекста
+ Важно: ViewModel не должна ничего возвращать в активити или фрагмент - для есть LiveData
+ LiveData - переменная, содержащая в себе какие-то данные. На эти данные можно подписаться и при
+ их изменении получать уведомление.
+ */
 class ControlViewModel(private val adapterProvider: BluetoothAdapterProvider) : ViewModel() {
 
     private val controlManager: BleControlManager = BleControlManager(adapterProvider.getContext())

@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.astar.bluetoothcontrol.databinding.ItemDeviceBinding
 
-// RecyclerView вызывает методы данного класса для связывания представлений с их данными
-// "Связывает ваши данные с представлениями ViewHolder"
-// "Adapter создает объекты ViewHolder по мере необходимости, а также устанавливает данные для этих представлений."
+ /* RecyclerView вызывает методы данного класса для связывания представлений с их данными
+ "Связывает ваши данные с представлениями ViewHolder"
+ "Adapter создает объекты ViewHolder по мере необходимости, а также устанавливает данные для этих представлений."
+  */
 class DevicesAdapter : RecyclerView.Adapter<DevicesAdapter.DeviceViewHolder>() {
 
     private val items = mutableListOf<BluetoothDevice>()

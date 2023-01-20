@@ -11,12 +11,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import java.lang.IllegalArgumentException
 
-
-// Содержит всю логику, которая не относится к отображения интерфейса.
-// ViewModel должа быть без контекста
+/* Содержит всю логику, которая не относится к отображения интерфейса.
+ Важно: ViewModel ничего не знает о активити или фрагменте (о View)
+ Важно: ViewModel должна быть без контекста
+ Важно: ViewModel не должна ничего возвращать в активити или фрагмент - для есть LiveData
+ LiveData - переменная, содержащая в себе какие-то данные. На эти данные можно подписаться и при
+ их изменении получать уведомление.
+ */
 class DevicesViewModel(adapterProvider: BluetoothAdapterProvider) : ViewModel() {
 
     private val _devices: MutableLiveData<List<BluetoothDevice>> = MutableLiveData()
+    /* Геттер для _devices. Нужен для того, чтобы получатель данных (активити или фрагмент) не
+    смогли ничего поменять во ViewModel. Изменение ViewModel из View противоречит паттерну MVVM*/
     val devices: LiveData<List<BluetoothDevice>> get() = _devices
 
     private val adapter = adapterProvider.getAdapter()

@@ -19,6 +19,7 @@ import ru.astar.bluetoothcontrol.databinding.FragmentDevicesBinding
 В соответствии с паттерном MVVM мы делегируем всю логику ViewModel'и. Активити и фрагменты
 отвечают только за отображение данных. Все вычисления и весь код содержащий логику работы
 приложения выносится во ViewModel. Нажата кнопка - делегируем во ViewModel, пусть сама разбирается.
+Важно: активити и фрагменты не имеют права менять что-либо во ViewModel
  */
 class DevicesFragment : Fragment(), DevicesAdapter.Callback {
 
@@ -75,6 +76,10 @@ class DevicesFragment : Fragment(), DevicesAdapter.Callback {
     }
 
     private fun subscribeOnViewModel() {
+        /* Подписка на изменение данных - код сработает в тот момент, когда devices viewModel
+        поменяется
+        Важно: от LiveData не нужно отписываться самостоятельно
+        */
         viewModel.devices.observe(viewLifecycleOwner) { devices ->
             devicesAdapter.update(devices)
         }
