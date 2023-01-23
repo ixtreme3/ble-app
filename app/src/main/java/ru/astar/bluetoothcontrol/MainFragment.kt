@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import androidx.fragment.app.viewModels
 import ru.astar.bluetoothcontrol.databinding.FragmentControlBinding
 
@@ -15,7 +14,7 @@ import ru.astar.bluetoothcontrol.databinding.FragmentControlBinding
 приложения выносится во ViewModel. Нажата кнопка - делегируем во ViewModel, пусть сама разбирается.
 Важно: активити и фрагменты не имеют права менять что-либо во ViewModel
  */
-class ControlFragment : Fragment() {
+class MainFragment : Fragment() {
 
     private var _binding: FragmentControlBinding? = null
     private val binding: FragmentControlBinding get() = _binding!!
@@ -46,23 +45,35 @@ class ControlFragment : Fragment() {
 //        })
     }
 
+
+    /* onResume вызывается, когда фрагмент виден пользователю и активно выполняется */
+    override fun onResume() {
+        super.onResume()
+
+        /* Достаем адрес устройства из аргументов и пытаемся установить соединение */
+        val deviceAddress = requireArguments().getString(KEY_DEVICE_ADDRESS)!!
+        viewModel.connect(deviceAddress)
+
+        // test
+//        while (true) viewModel.readData()
+    }
+
     override fun onStop() {
         super.onStop()
         viewModel.disconnect()
     }
 
-    /* Вызывается, когда фрагмент виден пользователю и активно выполняется. */
-    override fun onResume() {
-        super.onResume()
-
-        val deviceAddress = requireArguments().getString(KEY_DEVICE_ADDRESS)!!
-        viewModel.connect(deviceAddress)
-    }
-
+    /* Фабрика для создания MainFragment, связанного с адресом устройства с которым нужно установить
+    соединение.
+    Важно: Мы не используем констуктор класса, так как если Андроид решит пересоздать наш фрагмент,
+    то он в любом случае вызовет конструктор без параметров.
+    Таким образом, такая мини-фабрика - лучшее решение.
+    https://stackoverflow.com/questions/9245408/best-practice-for-instantiating-a-new-android-fragment
+    */
     companion object {
         private const val KEY_DEVICE_ADDRESS = "key_device_address"
         @JvmStatic
-        fun newInstance(deviceAddress: String) = ControlFragment().apply {
+        fun newInstance(deviceAddress: String) = MainFragment().apply {
             arguments = Bundle().apply {
                 putString(KEY_DEVICE_ADDRESS, deviceAddress)
             }

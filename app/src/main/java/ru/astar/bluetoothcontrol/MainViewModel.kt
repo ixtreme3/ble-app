@@ -1,9 +1,11 @@
 package ru.astar.bluetoothcontrol
 
 import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.observer.ConnectionObserver
 
 /* Содержит всю логику, которая не относится к отображения интерфейса.
@@ -11,22 +13,31 @@ import no.nordicsemi.android.ble.observer.ConnectionObserver
  Важно: ViewModel должна быть без контекста
  Важно: ViewModel не должна ничего возвращать в активити или фрагмент - для есть LiveData
  LiveData - переменная, содержащая в себе какие-то данные. На эти данные можно подписаться и при
- их изменении получать уведомление.
+ их изменении получать уведомление. См. метод subscribeOnViewModel() во фрагментах.
  */
 class ControlViewModel(private val adapterProvider: BluetoothAdapterProvider) : ViewModel() {
 
-    private val controlManager: BleControlManager = BleControlManager(adapterProvider.getContext())
+    private val controlManager: BLEControlManager = BLEControlManager(adapterProvider.getContext())
+    private lateinit var device: BluetoothDevice;
+
+    /* Переменная для хранения последних трех значений высоты прыжка */
+
+    /* Функция для обработки  */
+    fun readData() {
+        val data = controlManager.readDataFromServer()
+//        println(data.)
+    }
 
     fun connect(deviceAddress: String) {
-        val device = adapterProvider.getAdapter().getRemoteDevice(deviceAddress)
+        device = adapterProvider.getAdapter().getRemoteDevice(deviceAddress)
         controlManager.connect(device)
             .retry(2, 100)
             .useAutoConnect(false)
             .done {
-                Log.e("ControlViewModel", "connection success!")
+                Log.e("ControlViewModel", "Connection success")
             }
             .fail { _, status ->
-                Log.e("ControlViewModel", "connection failed, $status")
+                Log.e("ControlViewModel", "Connection failed, $status")
             }
             .enqueue()
         controlManager.setConnectionObserver(connectionObserver)
@@ -38,9 +49,7 @@ class ControlViewModel(private val adapterProvider: BluetoothAdapterProvider) : 
 
     private val connectionObserver = object : ConnectionObserver {
         override fun onDeviceConnecting(device: BluetoothDevice) {}
-
         override fun onDeviceConnected(device: BluetoothDevice) {}
-
         override fun onDeviceFailedToConnect(device: BluetoothDevice, reason: Int) {}
 
         override fun onDeviceReady(device: BluetoothDevice) {
@@ -48,7 +57,6 @@ class ControlViewModel(private val adapterProvider: BluetoothAdapterProvider) : 
         }
 
         override fun onDeviceDisconnecting(device: BluetoothDevice) {}
-
         override fun onDeviceDisconnected(device: BluetoothDevice, reason: Int) {}
     }
 }

@@ -8,16 +8,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 
+
+/* Вся программа стартует с класса MainActivity
+1. Переключаемся на фрагмент со списком bluetooth-устройств
+2. Запрашиваем разрешение на включение bluetooth, если он еще не включен
+*/
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         navigate(DevicesFragment.newInstance())
-
         enableBluetooth()
     }
 
+    /* Переключение на необходимый нам фрагмент */
     private fun navigate(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.containerFragment, fragment)

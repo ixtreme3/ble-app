@@ -19,7 +19,6 @@ import java.lang.IllegalArgumentException
  их изменении получать уведомление.
  */
 class DevicesViewModel(adapterProvider: BluetoothAdapterProvider) : ViewModel() {
-
     private val _devices: MutableLiveData<List<BluetoothDevice>> = MutableLiveData()
     /* Геттер для _devices. Нужен для того, чтобы получатель данных (активити или фрагмент) не
     смогли ничего поменять во ViewModel. Изменение ViewModel из View противоречит паттерну MVVM*/
